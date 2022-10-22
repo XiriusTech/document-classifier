@@ -79,7 +79,7 @@ for i,d in enumerate(dataset):
     v = [vocabulary_dict[d['w1']],vocabulary_dict[d['w2']],vocabulary_dict[d['w3']],d['dx2'],d['dy2'],d['dx3'],d['dy3']]
     t.add_item(i, v)
 t.build(10) # 10 trees
-t.save('knn_finesa.ann')
-with open("knn_finesa"+ '.mapping', 'wb') as handle:
+t.save('knn_model.ann')
+with open("knn_model"+ '.mapping', 'wb') as handle:
    pickle.dump(mapping, handle, protocol=pickle.HIGHEST_PROTOCOL)
 print("training model2")

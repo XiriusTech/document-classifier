@@ -20,10 +20,10 @@ from annoy import AnnoyIndex
 
 folder = "CARATULAS_DE_POLIZA"
 
-with open("knn_finesa"+".mapping","rb") as handle:
+with open("knn_model"+".mapping","rb") as handle:
   mapping = pickle.load(handle)          
 knn = AnnoyIndex(4, 'angular')
-knn.load('knn_finesa.ann') # super fast, will just mmap the file
+knn.load('knn_model.ann') # super fast, will just mmap the file
 vocabulary = open("vocabulario.txt","r",encoding="utf8")
 voc_list = vocabulary.read().split('\n')
 vocabulary_dict = {k: v for v, k in enumerate(voc_list)}
