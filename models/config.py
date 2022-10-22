@@ -1,7 +1,0 @@
-MODEL_FOLDER = "models"
-VOCAB_FILENAME = "vocabulario.txt"
-MODEL_FILENAME = "finalized_model.sav"
-LABELS_FILENAME = "finesa_caratulas_labels.sav"
-TFID_FILENAME = "finesa_tfid.sav"
-ANNOY_FILENAME = "knn_finesa.ann"
-MAPPING_DICT = "knn_finesa.mapping"

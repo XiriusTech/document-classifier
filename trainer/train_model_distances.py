@@ -19,7 +19,7 @@ from nltk.util import pr
 from annoy import AnnoyIndex
 
 
-folder = "CARATULAS_DE_POLIZA"
+folder = "DATASET"
 
 def perform_calculations(list_words,cls):
   if(len(list_words)<=0):
