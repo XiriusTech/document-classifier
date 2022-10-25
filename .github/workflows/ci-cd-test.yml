@@ -1,0 +1,66 @@
+name: GitHub CI/CD Cloudrun
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the develop branch
+  push:
+    branches: [ main ]
+env:
+  REGION: us-east4 # Cloud Run zone
+  PROJECT_ID: xirius-test-366115 # GCP project
+  BASE_IMAGE: gcr.io/xirius-test-366115/clasificador #Container registry entry for the api
+  SERVICE_NAME: clasificador #Cloud run service name
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "test-build-deploy"
+  test-build-deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Enviroment for deployment
+    environment:
+          name: 'Testing'
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Set up python 3.8 
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8' 
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID_TEST }}
+          service_account_key: ${{ secrets.GCP_SA_KEY_TEST }}
+          export_default_credentials: true
+
+      - name: Login to GCR # Login to GCP
+        uses: docker/login-action@v1
+        with:
+          registry: gcr.io
+          username: _json_key
+          password: ${{ secrets.GCP_SA_KEY_TEST }}
+      
+      - name: LOGIN GCP ACTIONS
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY_TEST }}
+
+      - name: Build & Publish Image # Use the dockerfile to publish image
+        uses: docker/build-push-action@v2
+        id: build
+        with:
+          context: .
+          push: true
+          tags: ${{ env.BASE_IMAGE }}:${{ github.sha }}
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@main
+        with:
+          region: ${{ env.REGION }}
+          service: ${{ env.SERVICE_NAME }}
+          image: ${{ env.BASE_IMAGE }}:${{ github.sha }}
