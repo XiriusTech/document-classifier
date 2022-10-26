@@ -61,7 +61,7 @@ def clasifyPagesWithId():
             if ".json" in b.name and not "google" in b.name:
                 blob = b
         if(blob is None):
-            time.sleep(5)
+            time.sleep(2)
 
     if blob is not None:
         bytes = download_as_blob(bucket, blob.name)[0]
