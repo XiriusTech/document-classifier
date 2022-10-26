@@ -1,12 +1,14 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
+from flask_cors import CORS
 import classify_service
 import json
 
 clasify_serv = classify_service.ClasifyService()
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def display_default():
